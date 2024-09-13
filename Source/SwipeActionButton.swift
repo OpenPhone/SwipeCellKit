@@ -15,7 +15,8 @@ class SwipeActionButton: UIButton {
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
     
-    
+    var onMenuDidHide: (() -> Void)?
+
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && imageHeight > 0) ? spacing : 0
     }
@@ -96,6 +97,11 @@ class SwipeActionButton: UIButton {
         var rect = contentRect.center(size: currentImage?.size ?? .zero)
         rect.origin.y = alignmentRect.minY + (imageHeight - rect.height) / 2
         return rect
+    }
+
+    override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willEndFor configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
+        super.contextMenuInteraction(interaction, willEndFor: configuration, animator: animator)
+        onMenuDidHide?()
     }
 }
 
