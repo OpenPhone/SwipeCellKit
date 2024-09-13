@@ -32,7 +32,9 @@ public class SwipeAction: NSObject {
     
     /// The style applied to the action button.
     public var style: SwipeActionStyle
-    
+
+    public var menu: UIMenu?
+
     /// The object that is notified as transitioning occurs.
     public var transitionDelegate: SwipeActionTransitioning?
     
@@ -91,9 +93,13 @@ public class SwipeAction: NSObject {
      - parameter title: The title of the action button.
      - parameter handler: The closure to execute when the user taps the button associated with this action.
     */
-    public init(style: SwipeActionStyle, title: String?, handler: ((SwipeAction, IndexPath) -> Void)?) {
+    public init(style: SwipeActionStyle,
+                title: String?,
+                menu: UIMenu? = nil,
+                handler: ((SwipeAction, IndexPath) -> Void)?) {
         self.title = title
         self.style = style
+        self.menu = menu
         self.handler = handler
     }
     

@@ -141,7 +141,16 @@ class SwipeActionsView: UIView {
     func addButtons(for actions: [SwipeAction], withMaximum size: CGSize, contentEdgeInsets: UIEdgeInsets) -> [SwipeActionButton] {
         let buttons: [SwipeActionButton] = actions.map({ action in
             let actionButton = SwipeActionButton(action: action)
-            actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
+            if let menu = action.menu {
+                actionButton.showsMenuAsPrimaryAction = true
+                actionButton.menu = menu
+                actionButton.onMenuDidHide = { [weak self, weak actionButton] in
+                    guard let self, let actionButton else { return }
+                    self.actionTapped(button: actionButton)
+                }
+            } else {
+                actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
+            }
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
